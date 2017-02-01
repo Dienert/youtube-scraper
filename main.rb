@@ -9,7 +9,7 @@ a = Mechanize.new { |agent|
 }
 
 
-def get_videos page, video, output
+def get_videos page, count, output
   divs = page.xpath('.//div[contains(@class, "yt-lockup-video")]')
 
   divs.each do |div|
@@ -29,12 +29,12 @@ def get_videos page, video, output
     views = views.to_s.split("\s")[0]
     views = views.gsub(%r{,}, "")
     dias = metainfo.xpath('./li[2]/text()')
-    video += 1
-    saida = "#{video};#{titulo};#{duracao};#{views};#{dias};https://www.youtube.com#{link};#{imagem}"
+    count += 1
+    saida = "#{count};#{titulo};#{duracao};#{views};#{dias};https://www.youtube.com#{link};#{imagem}"
     #puts saida
     output.puts saida
   end
-  video
+  count
 end
 
 canal = ARGV[0]
@@ -47,8 +47,8 @@ test_file = File.open("test.html", "w")
 
 page = a.get("https://www.youtube.com/user/#{canal}/videos")
 
-video = 0
-video = get_videos page, video, output
+count = 0
+count = get_videos page, count, output
 pag = 1
 
 link = page.xpath('.//button[contains(@class, "load-more-button")]/@data-uix-load-more-href')
@@ -63,6 +63,6 @@ loop do
   link = Nokogiri::HTML(obj["load_more_widget_html"]).xpath(
     './/button[contains(@class, "load-more-button")]/@data-uix-load-more-href')
   page = Nokogiri::HTML(page)
-  video = get_videos page, video, output
+  count = get_videos page, count, output
 end
 #output = File.open("resultado.html", "w");output.puts page;
