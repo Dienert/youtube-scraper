@@ -49,8 +49,8 @@ page = a.get("https://www.youtube.com/user/#{canal}/videos")
 
 count = 0
 count = get_videos page, count, output
-pag = 1
 
+pag = 1
 link = page.xpath('.//button[contains(@class, "load-more-button")]/@data-uix-load-more-href')
 
 loop do
